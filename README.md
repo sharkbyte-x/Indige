@@ -41,8 +41,8 @@ This project was developed and tested with Flutter 3.47.1 (stable) on Windows 11
 ### 2. Clone the project
 
 ```bash
-git clone https://github.com/<your-username>/<your-repo-name>.git
-cd <your-repo-name>
+git clone https://github.com/sharkbyte-x/Indige.git
+cd Indige
 ```
 
 ### 3. Install dependencies
