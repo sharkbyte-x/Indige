@@ -1,31 +1,169 @@
 # Indige
-An indigenous language learning app that will hold Central/Southern American indigenous language dictionaries, practice activities, and more.
 
-Tech Stack:
-- Flutter: Uniform user accessibility on old and newer android models as the focus.
-- Sqlite: Storing and loading local database's on user devices without the need for Internet connection.
-- Python: Logic, Processing, and more.
+Indige is a Flutter mobile app for practicing and learning indigenous languages. It currently includes a full offline **Purépecha** dictionary stored in a bundled SQLite database. Nahuatl and Maya are placeholders for future work.
 
-This project is open-source and will not gain any revenue through the app. Current language in development: Purepecha.
+## Features
 
-This app is intended to preserve and teach native central and south American languages as an effort to boost native language speakers and sustain ancestral knowledge.
+- Language selector home screen (Purépecha, Nahuatl, Maya)
+- Purépecha home page with three sections: **Diccionario**, **Práctica**, **Historia**
+- **Diccionario**: a scrollable, offline Purépecha-to-Spanish dictionary loaded from SQLite
+- **Práctica** and **Historia**: placeholder pages (coming soon)
 
-I welcome and prioritize members of indigenous communities to inquire and collaborate.
+## Tech stack
 
---
+- [Flutter](https://flutter.dev) / Dart
+- [sqflite](https://pub.dev/packages/sqflite) for SQLite on Android and iOS
+- [path](https://pub.dev/packages/path) for file paths
 
-# Indige
-Una aplicación para aprender lenguas indígenas que incluirá diccionarios de lenguas indígenas de Centroamérica y Sudamérica, actividades prácticas y más.
+> **Note:** This app is built for **mobile (Android/iOS)**. `sqflite` does not work in a web browser, so run it on an emulator or a phone, not Chrome.
 
-Tecnologías utilizadas:
-- Flutter: Prioriza la accesibilidad uniforme para usuarios de dispositivos Android, tanto antiguos como nuevos.
+---
 
-- SQLite: Permite almacenar y cargar bases de datos locales en los dispositivos de los usuarios sin necesidad de conexión a internet.
+## Run it on your own PC
 
-- Python: Lógica, procesamiento y más.
+### 1. Install the prerequisites
 
-Este proyecto es de código abierto y no generará ingresos a través de la aplicación. Idioma en desarrollo: Purepecha.
+1. **Flutter SDK**: follow the official guide for your OS: https://docs.flutter.dev/get-started/install
+2. **Android Studio** (for the Android SDK and emulator): https://developer.android.com/studio
+3. **A code editor**: [VS Code](https://code.visualstudio.com) with the Flutter extension, or Android Studio with the Flutter plugin
+4. **Git**: https://git-scm.com
 
-Esta aplicación busca preservar y enseñar lenguas nativas de Centroamérica y Sudamérica, con el objetivo de impulsar a los hablantes nativos y preservar el conocimiento ancestral.
+Then check your setup:
 
-Invito a los miembros de las comunidades indígenas a participar y colaborar.
+```bash
+flutter doctor
+```
+
+You only need the **Flutter** and **Android toolchain** sections to be working. Warnings about Visual Studio (Windows desktop development) or Chrome can be ignored for this project.
+
+This project was developed and tested with Flutter 3.47.1 (stable) on Windows 11.
+
+### 2. Clone the project
+
+```bash
+git clone https://github.com/<your-username>/<your-repo-name>.git
+cd <your-repo-name>
+```
+
+### 3. Install dependencies
+
+```bash
+flutter pub get
+```
+
+### 4. Create and start an Android emulator
+
+1. Open **Android Studio**, then go to **More Actions > Virtual Device Manager** (or **Tools > Device Manager**).
+2. Click **Create Device**, choose a phone (for example *Medium Phone*), pick a system image, and finish.
+3. Click the **play** button next to the device to start it.
+
+### 5. Run the app on the emulator
+
+List connected devices:
+
+```bash
+flutter devices
+```
+
+Find the Android emulator in the list (it usually looks like `emulator-5554`) and run on it explicitly:
+
+```bash
+flutter run -d emulator-5554
+```
+
+The first Android build can take a few minutes. When it finishes, you should see the **Indige** language selector.
+
+### 6. Try the dictionary
+
+Tap **Purepecha**, then **Diccionario**. You should see the scrollable Purépecha dictionary.
+
+---
+
+## Project structure
+
+```
+indige_flutter_app/
+├── assets/
+│   └── db/
+│       └── purhe_dict.db        # bundled SQLite dictionary
+├── lib/
+│   ├── main.dart                # language selector (home screen)
+│   ├── purhe.dart               # Purépecha home page (3 buttons)
+│   ├── purhe_dict.dart          # Diccionario page (reads from SQLite)
+│   ├── purhe_practica.dart      # Práctica page (placeholder)
+│   ├── purhe_historia.dart      # Historia page (placeholder)
+│   └── database_helper.dart     # copies the bundled DB to the device and queries it
+└── pubspec.yaml
+```
+
+## How the database works
+
+- The dictionary lives in `assets/db/purhe_dict.db` and is declared in `pubspec.yaml`:
+
+  ```yaml
+  flutter:
+    assets:
+      - assets/db/purhe_dict.db
+  ```
+
+- On first launch, `database_helper.dart` copies this file from the app bundle to the device's databases folder, then opens it with `sqflite`.
+- The table is named `purhepecha_dictionary` and has these columns:
+
+  | Column | Description |
+  |---|---|
+  | `purepecha` | Purépecha word |
+  | `pronunciation` | Pronunciation guide |
+  | `ipa` | IPA transcription |
+  | `spanish` | Spanish translation |
+  | `english` | English translation |
+  | `notes` | Extra notes |
+
+- The Diccionario page currently displays `purepecha` and `spanish`.
+
+### Updating the dictionary
+
+1. Export your spreadsheet as a **CSV** (make sure the first row is the header row).
+2. Open [DB Browser for SQLite](https://sqlitebrowser.org), create a new database, then **File > Import > Table from CSV file**. Check **Column names in first line**.
+3. Name the table `purhepecha_dictionary` (or update the table name in `database_helper.dart` to match).
+4. Click **Write Changes**, then save the file as `purhe_dict.db` into `assets/db/`.
+5. **Uninstall the app from the emulator** before re-running (see troubleshooting below), because the database is only copied on first launch.
+
+---
+
+## Troubleshooting
+
+| Problem | Fix |
+|---|---|
+| `databaseFactory not initialized` in the console | You are running on Chrome/web. Run on an Android emulator or phone instead. |
+| The app shows an old version of the UI | `flutter clean` does not touch the emulator. Uninstall the app from the emulator, then run `flutter run -d <device-id>` again. |
+| Dictionary is empty or shows a spinner forever | The old database is cached on the device. Uninstall the app from the emulator and reinstall. Also confirm the `.db` in `assets/db/` is the latest version. |
+| `Unable to load asset` | The asset path in `pubspec.yaml` and in `database_helper.dart` must match the real file, including the `.db` extension. The `assets` folder must sit next to `lib/`, not inside it. |
+| `no such table` / `no such column` | The table or column names in the code do not match the ones in the bundled `.db`. |
+| Changes to `pubspec.yaml` are not picked up | Stop the app completely and re-run. Hot reload and hot restart do not reload assets. |
+
+To uninstall the app from the emulator via the command line:
+
+```bash
+adb uninstall com.example.indige_flutter_app
+```
+
+A full clean rebuild:
+
+```bash
+flutter clean
+flutter pub get
+flutter run -d emulator-5554
+```
+
+## Roadmap
+
+- Search bar for the dictionary
+- Favorite words to create own flash card practice set
+- Styled dictionary entries (pronunciation, IPA, English)
+- Práctica (flashcard-style practice) page
+- Historia page
+- Nahuatl and Maya dictionaries
+
+## License
+
+Add your license here.
