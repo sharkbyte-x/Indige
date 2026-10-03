@@ -1,89 +1,52 @@
 import 'package:flutter/material.dart';
-import 'second_page.dart';
+import 'purhe.dart';
 
+void main() => runApp(MyApp());
 
-void main() => runApp(MyApp()); //RunsApp
-
-class MyApp extends StatelessWidget{ //AppisWidget 
-//Overall App Structure
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context){ //AppBuild
+  Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Indige", //AppName
-      theme: ThemeData( //AppTheme
+      title: "Indige",
+      theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.amber,
           foregroundColor: Colors.black,
         ),
       ),
-      home: MyHomePage(),//AppHomePage
+      home: MyHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget { //HomePageisWidget
+class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    
-    return Scaffold( //ScaffoldWidget
+    return Scaffold(
       appBar: AppBar(
         title: Text("Indige"),
       ),
-      body: Center( //Parent //CentersFollowing
-        child:Column( 
-          mainAxisAlignment: MainAxisAlignment.center, // centers vertically
-          crossAxisAlignment: CrossAxisAlignment.center, // centers horizontally
-            children: [
-              Text('Idioma'), //TextinColumn
-              ElevatedButton( //ButtoninColumn //NestedParent
-                onPressed: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SecondPage()),
-                  );
-                }, 
-                child: Text('Purepecha'), //NestedChild
-              ),
-              ElevatedButton( //ButtoninColumn //NestedParent
-                onPressed: (){
-                  print('button pressed');
-                }, 
-                child: Text('Nahuatl'), //NestedChild
-              ),
-              ElevatedButton( //ButtoninColumn //NestedParent
-                onPressed: (){
-                  print('button pressed');
-                }, 
-                child: Text('Maya'), //NestedChild
-              ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text('Idioma'),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PurhePage()),
+                );
+              },
+              child: Text('Purepecha'),
+            ),
           ],
         ),
       ),
     );
   }
-}
-
-class SecondPage extends StatelessWidget{
-  const SecondPage({super.key});
-
-  @override
-  Widget build(BuildContext context){
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Diccionario Purepecha')
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: (){
-            Navigator.pop(context);
-          },
-          child: const Text('Regresar')
-        ),
-    ),
-    );
-  }
-
 }
