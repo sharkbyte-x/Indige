@@ -22,8 +22,8 @@ The app does not collect, transmit, or store on any server:
 | Data | Where it lives | Purpose |
 |---|---|---|
 | Dictionary content | Local database bundled with the app | To provide the dictionary |
-| Favorite words `[when shipped]` | Local database on your device | To save your favorites and build practice sets |
-| Practice progress `[when shipped]` | Local storage on your device | To track your flashcard practice |
+| Favorite words  | Local database on your device | To save your favorites and build practice sets |
+| Practice progress  | Local storage on your device | To track your flashcard practice |
 
 This data is private to the app on your device and isn't accessible to me.
 
@@ -37,7 +37,7 @@ Downloading the app through Google Play is governed by Google's privacy policy. 
 
 ## 6. Data retention and deletion
 
-Your data stays on your device until you remove it. Uninstalling the app deletes the data it stored locally. `[Adjust for backups.]`
+Your data stays on your device until you remove it. Uninstalling the app deletes the data it stored locally.
 
 ## 7. Children's privacy
 
