@@ -12,6 +12,10 @@
 .swiftpm/
 migrate_working_dir/
 
+# DB
+assets/db/*.db
+desktop.ini
+
 # IntelliJ related
 *.iml
 *.ipr
